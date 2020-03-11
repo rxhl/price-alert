@@ -4,15 +4,19 @@ const CronJob = require('cron').CronJob;
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-// Amazon product
-const url = process.env.URL;
+// CONSTANTS
+const URL = process.env.URL; // Amazon product
+const DOM_ELEM = '#priceblock_ourprice'; // DOM element with price tag, modify as needed
+const SENDER_EMAIL = process.env.USER;
+const SENDER_PASS = process.env.PASS;
+const LIMIT = process.env.LIMIT; // Price threshold (in USD)
 
 // Setup puppeteer
 const configureBrowser = async () => {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   try {
-    await page.goto(url);
+    await page.goto(URL);
   } catch (error) {
     console.error(error);
   } finally {
@@ -28,14 +32,13 @@ const checkPrice = async page => {
     // Get full page
     let html = await page.evaluate(() => document.body.innerHTML);
 
-    // Get the DOM element with price
-    $('#priceblock_ourprice', html).each(function() {
+    $(DOM_ELEM, html).each(function() {
       const dollarPrice = $(this).text();
       currentPrice = Number(dollarPrice.replace(/[^0-9.-]+/g, ''));
     });
 
     //  Check if price less than threshold
-    if (currentPrice < process.env.LIMIT) {
+    if (currentPrice < LIMIT) {
       console.log(`Time to buy! Current price: ${currentPrice}`);
       sendNotifiacation(currentPrice);
     }
@@ -49,6 +52,8 @@ const checkPrice = async page => {
 // Cron job
 const startTracking = async () => {
   const page = await configureBrowser();
+
+  // Check price every 15s, modify as needed
   const job = new CronJob(
     '*/15 * * * * *',
     () => {
@@ -69,12 +74,12 @@ const sendNotifiacation = async price => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.USER,
-      pass: process.env.PASS
+      user: SENDER_EMAIL,
+      pass: SENDER_PASS
     }
   });
 
-  const htmlText = `Price dropped to ${price}, buy now! <br/> <a href=${url}>Link</a>`;
+  const htmlText = `Price dropped to ${price}, buy now! <br/> <a href=${URL}>Link</a>`;
 
   try {
     console.log(`Sending email...`);

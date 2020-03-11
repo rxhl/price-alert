@@ -24,4 +24,9 @@ npm start
 
 #### Email Settings
 
-Flock has an option to let the users reset their passwords. This uses flask-mail package which requires a valid email account. We are using Gmail here so after setting the correct values in the .env file, make sure to turn on Less secure app access from your Gmail account.
+Make sure to turn on **Less Secure App Access** from your Gmail account to be able to send notifications.
+
+## Resources
+
+- [Intro to puppeteer](https://developers.google.com/web/tools/puppeteer)
+- [Intro to cheerio](https://github.com/cheeriojs/cheerio)

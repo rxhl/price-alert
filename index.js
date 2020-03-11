@@ -4,6 +4,7 @@ const CronJob = require('cron').CronJob;
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
+// Amazon product
 const url = process.env.URL;
 
 // Setup puppeteer
@@ -33,6 +34,7 @@ const checkPrice = async page => {
       currentPrice = Number(dollarPrice.replace(/[^0-9.-]+/g, ''));
     });
 
+    //  Check if price less than threshold
     if (currentPrice < process.env.LIMIT) {
       console.log(`Time to buy! Current price: ${currentPrice}`);
       sendNotifiacation(currentPrice);

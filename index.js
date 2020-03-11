@@ -74,8 +74,7 @@ const sendNotifiacation = async price => {
     }
   });
 
-  const emailBody = `Price dropped to ${price}, buy now!`;
-  const htmlText = `<a href=${url}>Link</a>`;
+  const htmlText = `Price dropped to ${price}, buy now! <br/> <a href=${url}>Link</a>`;
 
   try {
     console.log(`Sending email...`);
@@ -83,7 +82,6 @@ const sendNotifiacation = async price => {
       from: `"Price Tracker" <${process.env.USER}>`,
       to: 'maniaxecorp@gmail.com',
       subject: 'Price drop!',
-      text: emailBody,
       html: htmlText
     });
     console.log(`Email sent to ${info.messageId}! Exiting process...`);

@@ -4,8 +4,7 @@ const CronJob = require('cron').CronJob;
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-const url =
-  'https://www.amazon.com/LG-27UK850-W-Monitor-Connectivity-FreeSync/dp/B078GVTD9N/';
+const url = process.env.URL;
 
 // Setup puppeteer
 const configureBrowser = async () => {
@@ -34,7 +33,7 @@ const checkPrice = async page => {
       currentPrice = Number(dollarPrice.replace(/[^0-9.-]+/g, ''));
     });
 
-    if (currentPrice < 500) {
+    if (currentPrice < process.env.LIMIT) {
       console.log(`Time to buy! Current price: ${currentPrice}`);
       sendNotifiacation(currentPrice);
     }

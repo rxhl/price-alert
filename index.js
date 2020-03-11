@@ -85,7 +85,7 @@ const sendNotifiacation = async price => {
     console.log(`Sending email...`);
     const info = await transporter.sendMail({
       from: `"Price Tracker" <${process.env.USER}>`,
-      to: 'maniaxecorp@gmail.com',
+      to: 'example@example.com',
       subject: 'Price drop!',
       html: htmlText
     });
